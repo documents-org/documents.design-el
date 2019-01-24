@@ -5,22 +5,19 @@ defmodule DocumentsDesignWeb.AuthController do
   alias DocumentsDesign.Accounts.User
 
   plug :set_layout
-  plug :has_at_least_one_user when not (action in [:register, :do_register])
+  plug DocumentsDesignWeb.Plugs.SetUser when action in [:verify, :do_verify]
+  plug DocumentsDesignWeb.Plugs.AlreadyHasFirstUser when action in [:register, :do_register]
 
   defp set_layout(conn, _) do
     conn |> put_layout("auth.html")
   end
 
-  defp has_at_least_one_user(conn, _) do
-    if Accounts.has_user() do
-      redirect(conn, to: Routes.auth_path(conn, :register))
-    else
-      conn
-    end
-  end
-
-  defp send_verify_mail(conn) do
-    DocumentsDesign.Email.verify_email(conn.assigns.user)
+  @doc """
+  Sends an user their verification email.
+  Pipeable as a plug.
+  """
+  defp send_verify_mail(conn, user) do
+    DocumentsDesign.Email.verify_email(user)
     |> DocumentsDesign.Mailer.deliver_later()
 
     conn
@@ -30,21 +27,49 @@ defmodule DocumentsDesignWeb.AuthController do
     render(conn, "login.html")
   end
 
-  def do_login(conn, %{"info" => %{"email" => email, "password" => password}}) do
+  @doc """
+  Tries to authenticate an user.
+  If we succeed, set session ID and redirect to the homepage.
+  """
+  def do_login(conn, %{"info" => %{"email" => email, "password" => password}} = params) do
+    case Accounts.auth_user(email, password) do
+      {:ok, user} ->
+        conn
+        |> put_session(:user_id, user.id)
+        |> redirect(to: Routes.page_path(conn, :index))
+
+      {:error, _} ->
+        conn
+        |> put_flash(:error, "Bad credentials")
+        |> redirect(to: Routes.auth_path(conn, :login))
+    end
+
     render(conn, "login.html")
   end
 
+  @doc """
+  Logs out an user.
+  """
   def logout(conn, _params) do
+    conn
+    |> configure_session(drop: true)
+    |> redirect(to: Routes.page_path(conn, :index))
   end
 
   def register(conn, _params) do
     render(conn, "register.html")
   end
 
+  @doc """
+  If there's no user yet, we serve this page, and allow the creation of the first user.
+  """
   def do_register(conn, %{"info" => info}) do
     case Accounts.create_user(info) do
       {:ok, user} ->
-        conn |> assign(:user, user) |> send_verify_mail |> render("verify_email.html")
+        conn
+        |> put_session(:user_id, user.id)
+        |> send_verify_mail(user)
+        |> redirect(to: Routes.auth_path(conn, :verify))
 
       {:error, _} ->
         conn
@@ -53,15 +78,38 @@ defmodule DocumentsDesignWeb.AuthController do
     end
   end
 
+  def verify(conn, _params) do
+    render(conn, "verify_email.html")
+  end
+
+  @doc """
+  Verifies an user's email address.
+  """
+  def do_verify(conn, %{"info" => %{"email" => email, "verify" => verify_token}}) do
+    case Accounts.verify_email(email, verify_token) do
+      {:ok, user} ->
+        conn |> put_session(:user_id, user.id) |> redirect(to: Routes.page_path(conn, :index))
+
+      {:error, _} ->
+        redirect(conn, to: Routes.auth_path(conn, :verify))
+    end
+  end
+
   def forgot(conn, _params) do
   end
 
+  @doc """
+  Sets a new token to the given e-mail, sends it via e-mail, and maybe allow to reset the password.
+  """
   def do_forgot(conn, _params) do
   end
 
   def reset(conn, _params) do
   end
 
+  @doc """
+  Allows to reset an user's password. Notifies them by e-mail afterwards.
+  """
   def do_reset(conn, _params) do
   end
 end

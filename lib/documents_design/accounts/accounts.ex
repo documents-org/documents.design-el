@@ -37,6 +37,8 @@ defmodule DocumentsDesign.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_user(id), do: Repo.get(User, id)
+
   @doc """
   Creates a user.
 
@@ -51,8 +53,48 @@ defmodule DocumentsDesign.Accounts do
   """
   def create_user(attrs \\ %{}) do
     %User{}
-    |> User.changeset(Map.put(attrs, "verify_token", DocumentsDesign.Utilities.random_token()))
+    |> User.changeset(prepare_new_user_attrs(attrs))
     |> Repo.insert()
+  end
+
+  def prepare_new_user_attrs(%{"password" => p} = attrs) do
+    attrs
+    |> Map.put("verify_token", DocumentsDesign.Utilities.random_token())
+    |> Map.put("password", hash_password(p))
+  end
+
+  def verify_email(email, token) do
+    case Repo.get_by(User, %{email: email, verify_token: token}) do
+      user ->
+        Ecto.Changeset.cast(user, %{verified: true}, [:verified])
+        |> Repo.update()
+
+      nil ->
+        {:error, "User not found"}
+    end
+  end
+
+  def auth_user(email, password) do
+    case Repo.get_by(User, %{email: email}) do
+      user ->
+        if verify_password(user, password) do
+          {:ok, user}
+        else
+          {:error, "Bad credentials"}
+        end
+
+      _ ->
+        Comeonin.Argon2.dummy_checkpw()
+        {:error, "Bad credentials"}
+    end
+  end
+
+  def verify_password(user, password) do
+    Comeonin.Argon2.checkpw(password, user.password)
+  end
+
+  def hash_password(password) do
+    password |> Comeonin.Argon2.hashpwsalt()
   end
 
   @doc """

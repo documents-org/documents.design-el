@@ -9,21 +9,31 @@ defmodule DocumentsDesignWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :global do
+    plug DocumentsDesignWeb.Plugs.NeedsFirstUser
+    plug DocumentsDesignWeb.Plugs.SetUser
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/", DocumentsDesignWeb do
+  scope "/auth", DocumentsDesignWeb do
     pipe_through :browser
+    get "/register", AuthController, :register
+    post "/register", AuthController, :do_register
+    get "/verify", AuthController, :verify
+    post "/verify", AuthController, :do_verify
+    get "/login", AuthController, :login
+    post "/login", AuthController, :do_login
+  end
 
+  scope "/", DocumentsDesignWeb do
+    pipe_through [:browser, :global]
     get "/", PageController, :index
 
     scope "/auth" do
-      get "/login", AuthController, :login
-      post "/login", AuthController, :do_login
       get "/logout", AuthController, :logout
-      get "/register", AuthController, :register
-      post "/register", AuthController, :do_register
       get "/forgot", AuthController, :forgot
       post "/forgot", AuthController, :do_forgot
       get "/reset", AuthController, :reset
