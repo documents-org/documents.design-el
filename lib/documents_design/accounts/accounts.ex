@@ -37,6 +37,9 @@ defmodule DocumentsDesign.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  @doc """
+  Get an user by id, without throwing.
+  """
   def get_user(id), do: Repo.get(User, id)
 
   @doc """
@@ -57,12 +60,18 @@ defmodule DocumentsDesign.Accounts do
     |> Repo.insert()
   end
 
+  @doc """
+  Prepares an user for insertion when it comes from a register/reset form.
+  """
   def prepare_new_user_attrs(%{"password" => p} = attrs) do
     attrs
     |> Map.put("verify_token", DocumentsDesign.Utilities.random_token())
     |> Map.put("password", hash_password(p))
   end
 
+  @doc """
+  Tries to set "verified" status to 1 when an user verifies their email.
+  """
   def verify_email(email, token) do
     case Repo.get_by(User, %{email: email, verify_token: token}) do
       user ->
@@ -74,6 +83,9 @@ defmodule DocumentsDesign.Accounts do
     end
   end
 
+  @doc """
+  Tries to authentificate an user.
+  """
   def auth_user(email, password) do
     case Repo.get_by(User, %{email: email}) do
       user ->
@@ -89,10 +101,16 @@ defmodule DocumentsDesign.Accounts do
     end
   end
 
+  @doc """
+  Verifies the password for a given user.
+  """
   def verify_password(user, password) do
     Comeonin.Argon2.checkpw(password, user.password)
   end
 
+  @doc """
+  Hashes a password using argon2, wraps Comeonin.
+  """
   def hash_password(password) do
     password |> Comeonin.Argon2.hashpwsalt()
   end
@@ -144,6 +162,9 @@ defmodule DocumentsDesign.Accounts do
     User.changeset(user, %{})
   end
 
+  @doc """
+  Do we have at least an user created ?
+  """
   def has_user do
     Repo.one(from u in "users", select: count()) > 0
   end
