@@ -1,0 +1,11 @@
+<div class="LoginBox">
+    <%= form_for @conn, Routes.auth_path(@conn, :do_login), [as: :info, method: "post"], fn f -> %>
+      <div>
+          <%= text_input f, :email, [id: "auth-login-email", placeholder: "Email"] %>
+      </div>
+      <div>
+          <%= password_input f, :password, [id: "auth-login-password", placeholder: "Mot de passe"] %>
+      </div>
+      <%= submit "Sign In", [id: "auth-login-submit"] %>
+    <% end %>
+</div>

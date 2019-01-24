@@ -1,0 +1,16 @@
+<div class="RegisterBox">
+  <p>Bienvenue !<br>Vous devez commencer par créer un utilisateur.</p>
+
+  <%= form_for @conn, Routes.auth_path(@conn, :do_register), [as: :info, method: "post"], fn f -> %>
+    <div>
+      <%= text_input f, :name, [id: "auth-register-name", placeholder: "Prénom"] %>
+    </div>
+    <div>
+        <%= text_input f, :email, [id: "auth-register-email", placeholder: "Email"] %>
+    </div>
+    <div>
+        <%= text_input f, :password, [id: "auth-register-password", placeholder: "Mot de passe"] %>
+    </div>
+    <%= submit "Sign In", [id: "auth-register-submit"] %>
+  <% end %>
+</div>
