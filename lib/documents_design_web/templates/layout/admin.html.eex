@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>documents.design</title>
     <link rel="icon" href="<%= Routes.static_path(@conn, "/favicon.png") %>"/>
-    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/main.css") %>"/>
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
   </head>
   <body>
     <main role="main" class="container">
@@ -14,11 +14,6 @@
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= render @view_module, @view_template, assigns %>
     </main>
-    <%= if @conn.assigns.user do %>
-      <div class="LoggedBar">Connecté en tant que <%= @conn.assigns.user.name %> - <%= link "déconnexion", to: Routes.auth_path(@conn, :logout) %></div>
-    <% else %>
-      <div class="LoggedBar"><%= link "connexion", to: Routes.auth_path(@conn, :login) %></div>
-    <% end %>
-    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/main.js") %>"></script>
+    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

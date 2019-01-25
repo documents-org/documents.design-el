@@ -14,6 +14,11 @@ defmodule DocumentsDesignWeb.Router do
     plug DocumentsDesignWeb.Plugs.SetUser
   end
 
+  pipeline :admin do
+    plug DocumentsDesignWeb.Plugs.NeedsFirstUser
+    plug DocumentsDesignWeb.Plugs.NeedsAuth
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -28,9 +33,22 @@ defmodule DocumentsDesignWeb.Router do
     post "/login", AuthController, :do_login
   end
 
+  scope "/admin", DocumentsDesignWeb do
+    pipe_through [:browser, :global, :admin]
+    get "/", AdminController, :index
+    get "/tags", AdminController, :tags
+    get "/sequence", AdminController, :sequence
+    get "/info", AdminController, :info
+    get "/projects", AdminController, :projects
+    get "/projects/edit/:id", AdminController, :edit_project
+    get "/projects/new", AdminController, :new_project
+  end
+
   scope "/", DocumentsDesignWeb do
     pipe_through [:browser, :global]
     get "/", PageController, :index
+    get "/index", PageController, :projects
+    get "/project/:slug", PageController, :project
 
     scope "/auth" do
       get "/logout", AuthController, :logout

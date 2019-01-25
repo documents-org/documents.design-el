@@ -14,11 +14,6 @@
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= render @view_module, @view_template, assigns %>
     </main>
-    <%= if @conn.assigns.user do %>
-      <div class="LoggedBar">Connecté en tant que <%= @conn.assigns.user.name %> - <%= link "déconnexion", to: Routes.auth_path(@conn, :logout) %></div>
-    <% else %>
-      <div class="LoggedBar"><%= link "connexion", to: Routes.auth_path(@conn, :login) %></div>
-    <% end %>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/main.js") %>"></script>
   </body>
 </html>
