@@ -1,0 +1,45 @@
+.ProjectPage {
+  h2 {
+    margin-bottom: 1em;
+  }
+  &__text {
+    margin-top: 1em;
+    display: flex;
+    line-height: 1.2;
+    &__left,
+    &__right {
+      flex: 0 0 50%;
+    }
+    &__left {
+      padding-right: 2ch;
+    }
+    &__right {
+      position: relative;
+    }
+    @media screen and (max-width: 960px) {
+      flex-wrap: wrap;
+      &__left,
+      &__right {
+        flex: 0 0 100%;
+      }
+
+      &__left {
+        padding-right: 0;
+        padding-bottom: 2ch;
+      }
+    }
+  }
+  &__tags {
+    margin-top: 1em;
+    font-family: 'BorgesBlanca', serif;
+    font-style: italic;
+    &__tag {
+      word-break: keep-all;
+      display: inline-block;
+      &::after {
+        // prettier-ignore
+        content: "/";
+      }
+    }
+  }
+}

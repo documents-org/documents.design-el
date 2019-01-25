@@ -1,0 +1,129 @@
+@lost flexbox flex;
+@import './../node_modules/reset-css/sass/reset';
+
+$text: "BorgesTituloBlanca", serif;
+$titles: "BorgesBlanca", serif;
+$size: 21px;
+$background: #f8f8f8;
+
+
+html * {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: $text;
+    font-size: $size;
+    height: 100%;
+    background: $background;
+    touch-action: manipulation;
+  @media screen and (max-width: 540px) {
+    font-size: 16px;
+  }
+}
+
+em, i {
+  font-family: $titles;
+}
+
+strong {
+  font-weight: normal;
+  display: inline-block;
+  position: relative;
+}
+
+body {
+    width: 100%;
+    margin: auto auto 1.5em;
+    margin-top: 1.5em;
+    padding: 30px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  @media screen and (max-width: 540px) {
+    padding: 15px;
+  }
+  @media screen and (max-width: 540px) {
+    margin-top: 0;
+  }
+    -webkit-text-size-adjust: 100%;
+  line-height: 1.2;
+
+}
+
+a {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  &::before {
+    position: absolute;
+    height: 1px;
+    left:0;
+    right: 0;
+    bottom:3px;
+    background: #959595;
+    content:"";
+    z-index: -1;
+    @media screen and (max-width: 540px) {
+      bottom: 1px;
+      z-index: 0;
+    }
+  }
+  &.u-noline {
+    text-decoration: none;
+    &::before {
+      display: none;
+    }
+  }
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    color: transparent;
+    &::selection {
+        background: none;
+    }
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+@import "components/Header";
+@import "components/Sliders";
+@import "components/Slide";
+@import "components/CenterWrap";
+@import "components/ProjectList";
+@import "components/Project";
+
+.ita, em {
+  font-style: italic;
+  font-family: $titles;
+}
+
+.u {
+  &-noline {
+    text-decoration: none;
+  }
+  &-textbox {
+    max-width: 75ch;
+  }
+  &-nomargin {
+    margin: 0;
+  }
+}
+
+sup {
+  font-size: .65em;
+  position: relative;
+  top: -8px;
+  left: 1px;
+}
+
+.Otete {
+  font-size: .65em;
+  margin-top: 1em;
+  font-family: $titles;
+}

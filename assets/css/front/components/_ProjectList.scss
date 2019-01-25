@@ -1,0 +1,62 @@
+.ProjectList {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 3em;
+  @media screen and (max-width: 540px) {
+    margin-top: 0;
+  }
+}
+
+.ProjectThumbnail {
+  lost-column: 1/6;
+  .title {
+    height: 2.2em * 1.2;
+    position: relative;
+    display: block;
+  }
+  h3 {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+  }
+  @media screen and (max-width: 2400px) {
+    lost-column: 1/5;
+  }
+  @media screen and (max-width: 1920px) {
+    lost-column: 1/4;
+  }
+  @media screen and (max-width: 1650px) {
+    lost-column: 1/3;
+  }
+  @media screen and (max-width: 1024px) {
+    lost-column: 1/2;
+    margin-bottom: 24px;
+  }
+  @media screen and (max-width: 540px) {
+    lost-column: 1/1;
+    margin-bottom: 24px;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  margin-bottom: 30px;
+  transition: filter 0.3s;
+  &__video {
+    width: 100%;
+    height: auto;
+  }
+  &:hover {
+    filter: none !important;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .Page.Sommaire {
+    .Header h2 {
+      display: none;
+    }
+  }
+}

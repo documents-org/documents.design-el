@@ -1,0 +1,41 @@
+.YBCenterWrap {
+  margin: 2em auto;
+  margin-top: 3em;
+  height: calc(100vh - 10em);
+  width: calc(((100vh - 10em) * 1.67) - 60px);
+
+  @media screen and (max-width: 540px) {
+    margin-top: 0em;
+    margin-bottom: 3em;
+  }
+
+  @media screen and (max-aspect-ratio: 55 / 40) {
+    height: auto;
+    width: 100%;
+  }
+
+  position: relative;
+  &__overlay {
+    z-index: 9;
+    background: white;
+    position: absolute;
+    width: 100%;
+    opacity: 1;
+    transition: opacity 0.5s;
+    height: 100%;
+    left: 0;
+    pointer-events: none;
+    top: 0;
+  }
+
+  &__link {
+    position: absolute;
+    z-index: 9;
+    cursor: pointer;
+    width: 33%;
+    left: 33%;
+    top: 0;
+    height: 100%;
+    opacity: 0;
+  }
+}

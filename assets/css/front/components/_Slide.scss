@@ -1,0 +1,41 @@
+.Slide {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-size: 0;
+  line-height: 0;
+  position: relative;
+  img {
+    width: auto;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  &__overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 1;
+    pointer-events: none;
+    background: #dfd8d9;
+    z-index: 1;
+    transition: opacity .3s;
+  }
+  &.loaded {
+    .Slide__overlay {
+      opacity: 0;
+    }
+  }
+  &__video {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.Slider__center .Slide {
+  text-align: left;
+}

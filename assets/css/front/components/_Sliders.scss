@@ -1,0 +1,100 @@
+.SliderOuter {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.Slider {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 62.5%;
+
+  &__overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  &__inner {
+    position: absolute;
+    left: -0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  &__slides {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    font-size: 0;
+    display: flex;
+  }
+
+  margin-left: auto;
+
+  .SlideAreaNext {
+    cursor: e-resize;
+    right: 0;
+    left: auto;
+  }
+
+  .SlideAreaPrev {
+    cursor: w-resize;
+    left: 0;
+    right: auto;
+  }
+
+  .SliderButtonPrev, .SliderButtonNext {
+    position: absolute;
+    transition: opacity .2s;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 8px;
+    cursor: pointer;
+    font-size: 1.3em;
+  }
+  .SliderButtonPrev {
+    left: -24px;
+    @media screen and (max-width: 540px) {
+      left: -16px;
+    }
+  }
+  .SliderButtonNext {
+    right: -24px;
+    @media screen and (max-width: 540px) {
+      right: -16px;
+    }
+  }
+
+  flex-basis: 100%;
+}
+
+.SlideAreaPrev, .SlideAreaNext {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  height: 100%;
+
+  &.half {
+    width: 50%;
+  }
+  &.smaller {
+    width: 30%;
+  }
+  cursor: pointer;
+}
+
+.SlideAreaPrev {
+  left: 0;
+}
+
+.SlideAreaNext {
+  right: 0;
+}
