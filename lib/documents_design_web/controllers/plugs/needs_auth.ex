@@ -1,7 +1,6 @@
 defmodule DocumentsDesignWeb.Plugs.NeedsAuth do
   import Plug.Conn
   import Phoenix.Controller
-  alias DocumentsDesignWeb.Routes
 
   @moduledoc """
     Guards access to unauthenticated users.
@@ -15,7 +14,7 @@ defmodule DocumentsDesignWeb.Plugs.NeedsAuth do
       nil ->
         conn
         |> put_flash(:error, "You should be logged in")
-        |> redirect(to: Routes.auth_path(conn, :login))
+        |> redirect(to: DocumentsDesignWeb.Router.Helpers.auth_path(conn, :login))
         |> halt()
 
       _ ->

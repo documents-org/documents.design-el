@@ -1,0 +1,29 @@
+<div class="VerifyBox AuthBox">
+  <h3 class="subtitle">Réinitialisation de votre mot de passe</h3>
+  <div class="box">
+   <%= form_for @conn, Routes.auth_path(@conn, :do_reset), [as: :info, method: "post"], fn f -> %>
+   <div class="field">
+     <label for="auth-reset-email" class="label">Adresse e-mail :</label>
+     <div class="control">
+       <%= text_input f, :email, [id: "auth-reset-email", placeholder: "Email", value: @email, class: "input"] %>
+     </div>
+   </div>
+   <div class="field">
+     <label for="auth-reset-token" class="label">Code de vérification</label>
+     <div class="control">
+       <%= text_input f, :token, [id: "auth-reset-token", placeholder: "tLACZk7A9i6hCzOZ+AzkrULAiocp4myWFl8Yk", class: "input"] %>
+     </div>
+   </div>  
+   <div class="field">
+     <label for="auth-reset-password" class="label">Nouveau mot de passe</label>
+     <div class="control">
+       <%= text_input f, :password, [id: "auth-reset-password", placeholder: "tLACZk7A9i6hCzOZ+AzkrULAiocp4myWFl8Yk", class: "input"] %>
+     </div>
+   </div>
+   <div class="field">
+      <%= submit "Changer le mot de passe", [id: "auth-reset-submit", class: "button is-dark"] %>
+    </div>
+    <% end %>
+    </div>
+    <%= link "retour à la connexion", to: Routes.auth_path(@conn, :login) %>
+</div>

@@ -2,7 +2,6 @@ defmodule DocumentsDesignWeb.AuthController do
   use DocumentsDesignWeb, :controller
 
   alias DocumentsDesign.Accounts
-  alias DocumentsDesign.Accounts.User
 
   plug :set_layout
   plug DocumentsDesignWeb.Plugs.SetUser when action in [:verify, :do_verify]
@@ -16,8 +15,22 @@ defmodule DocumentsDesignWeb.AuthController do
   Sends an user their verification email.
   Pipeable as a plug.
   """
-  defp send_verify_mail(conn, user) do
+  def send_verify_mail(conn, user) do
     DocumentsDesign.Email.verify_email(user)
+    |> DocumentsDesign.Mailer.deliver_later()
+
+    conn
+  end
+
+  def send_reset_mail(conn, user) do
+    DocumentsDesign.Email.reset_mail(user)
+    |> DocumentsDesign.Mailer.deliver_later()
+
+    conn
+  end
+
+  def send_reset_done_mail(conn, user) do
+    DocumentsDesign.Email.reset_mail_done(user)
     |> DocumentsDesign.Mailer.deliver_later()
 
     conn
@@ -31,7 +44,7 @@ defmodule DocumentsDesignWeb.AuthController do
   Tries to authenticate an user.
   If we succeed, set session ID and redirect to the homepage.
   """
-  def do_login(conn, %{"info" => %{"email" => email, "password" => password}} = params) do
+  def do_login(conn, %{"info" => %{"email" => email, "password" => password}} = _params) do
     case Accounts.auth_user(email, password) do
       {:ok, user} ->
         conn
@@ -78,6 +91,9 @@ defmodule DocumentsDesignWeb.AuthController do
     end
   end
 
+  @doc """
+  Email verification page
+  """
   def verify(conn, _params) do
     render(conn, "verify_email.html")
   end
@@ -95,21 +111,50 @@ defmodule DocumentsDesignWeb.AuthController do
     end
   end
 
+  @doc """
+  Forgot password page
+  """
   def forgot(conn, _params) do
+    render(conn, "forgot.html")
   end
 
   @doc """
   Sets a new token to the given e-mail, sends it via e-mail, and maybe allow to reset the password.
   """
-  def do_forgot(conn, _params) do
-  end
+  def do_forgot(conn, %{"info" => %{"email" => email}} = _params) do
+    case Accounts.start_reset_password(email) do
+      {:ok, user} ->
+        conn
+        |> send_reset_mail(user)
+        |> put_session(:reset_email, email)
+        |> redirect(to: Routes.auth_path(conn, :reset))
 
-  def reset(conn, _params) do
+      {:error, _} ->
+        conn |> redirect(to: Routes.auth_path(conn, :forgot))
+    end
   end
 
   @doc """
-  Allows to reset an user's password. Notifies them by e-mail afterwards.
+  Password reset page after successful reset start
   """
-  def do_reset(conn, _params) do
+  def reset(conn, _params) do
+    render(conn, "reset.html", email: get_session(conn, :reset_email))
+  end
+
+  @doc """
+  Resets an user's password. Notifies them by e-mail afterwards.
+  """
+  def do_reset(conn, %{"info" => %{"email" => e, "token" => t, "password" => p}} = _params) do
+    case Accounts.do_reset_password(e, t, p) do
+      {:ok, user} ->
+        conn
+        |> send_reset_done_mail(user)
+        |> put_session(:user_id, user.id)
+        |> redirect(to: Routes.page_path(conn, :index))
+
+      {:error, _} ->
+        conn
+        |> redirect(to: Routes.auth_path(conn, :reset))
+    end
   end
 end

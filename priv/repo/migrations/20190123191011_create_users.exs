@@ -7,7 +7,7 @@ defmodule DocumentsDesign.Repo.Migrations.CreateUsers do
       add :email, :string
       add :password, :string
       add :reset_token, :string
-      add :reset_date, :string
+      add :reset_date, :naive_datetime
       add :verify_token, :string
       add :verified, :boolean
       timestamps()

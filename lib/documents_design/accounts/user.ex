@@ -6,7 +6,7 @@ defmodule DocumentsDesign.Accounts.User do
     field :email, :string
     field :name, :string
     field :password, :string
-    field :reset_date, :string
+    field :reset_date, :naive_datetime
     field :reset_token, :string
     field :verify_token, :string
     field :verified, :boolean

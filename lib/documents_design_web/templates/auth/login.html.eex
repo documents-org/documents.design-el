@@ -1,11 +1,21 @@
-<div class="LoginBox">
-    <%= form_for @conn, Routes.auth_path(@conn, :do_login), [as: :info, method: "post"], fn f -> %>
-      <div>
-          <%= text_input f, :email, [id: "auth-login-email", placeholder: "Email"] %>
+<div class="LoginBox AuthBox">
+    <h3 class="subtitle">Connexion</h3>
+    <div class="box">
+      <%= form_for @conn, Routes.auth_path(@conn, :do_login), [as: :info, method: "post"], fn f -> %>
+      <div class="field">
+        <label for="auth-login-email" class="label">Email</label>
+        <div class="control">
+          <%= text_input f, :email, [id: "auth-login-email", placeholder: "william@morris.com", class: "input"] %>
+        </div>
       </div>
-      <div>
-          <%= password_input f, :password, [id: "auth-login-password", placeholder: "Mot de passe"] %>
+      <div class="field">
+        <label for="auth-login-password" class="label">Mot de passe</label>
+        <div class="control">
+          <%= password_input f, :password, [id: "auth-login-password", placeholder: "", class: "input"] %>
       </div>
-      <%= submit "Sign In", [id: "auth-login-submit"] %>
+      </div>
+      <%= submit "Connexion", [id: "auth-login-submit", class: "button is-dark"] %>
     <% end %>
+    </div>
+    <%= link "Mot de passe oublié ?", to: Routes.auth_path(@conn, :forgot) %>
 </div>

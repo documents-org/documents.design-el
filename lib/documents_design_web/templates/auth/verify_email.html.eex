@@ -1,13 +1,21 @@
-<div class="VerifyBox">
-  Saisissez ici le code de vérification qui vous a été envoyé par e-mail.
-
+<div class="VerifyBox AuthBox">
+  <h3 class="subtitle">Vérification de votre e-mail</h3>
+  <div class="box">
    <%= form_for @conn, Routes.auth_path(@conn, :do_verify), [as: :info, method: "post"], fn f -> %>
-      <div>
-          <%= text_input f, :email, [id: "auth-verify-email", placeholder: "Email", value: @conn.assigns.user && @conn.assigns.user.email || ""] %>
-      </div>
-      <div>
-          <%= text_input f, :verify, [id: "auth-verify-verify_token", placeholder: "Mot de passe"] %>
-      </div>
-      <%= submit "Sign In", [id: "auth-verify-submit"] %>
+   <div class="field">
+     <label for="auth-verify-email" class="label">Adresse e-mail :</label>
+     <div class="control">
+       <%= text_input f, :email, [id: "auth-verify-email", placeholder: "Email", value: @conn.assigns.user && @conn.assigns.user.email || "", class: "input"] %>
+     </div>
+   </div>
+   <div class="field">
+     <label for="auth-verify-verify_token" class="label">Code de vérification</label>
+     <div class="control">
+       <%= text_input f, :verify, [id: "auth-verify-verify_token", placeholder: "tLACZk7A9i6hCzOZ+AzkrULAiocp4myWFl8Yk", class: "input"] %>
+     </div>
+   </div>  
+      <%= submit "Vérifier & me connecter", [id: "auth-verify-submit", class: "button is-dark"] %>
     <% end %>
+    </div>
+    <%= link "retour à la connexion", to: Routes.auth_path(@conn, :login) %>
 </div>

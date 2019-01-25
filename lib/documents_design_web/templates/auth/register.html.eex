@@ -1,16 +1,20 @@
 <div class="RegisterBox">
-  <p>Bienvenue !<br>Vous devez commencer par créer un utilisateur.</p>
-
-  <%= form_for @conn, Routes.auth_path(@conn, :do_register), [as: :info, method: "post"], fn f -> %>
-    <div>
-      <%= text_input f, :name, [id: "auth-register-name", placeholder: "Prénom"] %>
+  <h3 class="subtitle">Bienvenue !<br>Vous devez commencer par créer un utilisateur.</h3>
+  <div class="box">
+    <%= form_for @conn, Routes.auth_path(@conn, :do_register), [as: :info, method: "post"], fn f -> %>
+    <div class="field">
+      <label for="auth-register-name" class="label">Nom</label>
+      <%= text_input f, :name, [id: "auth-register-name", placeholder: "Jenna Madison", class: "input"] %>
     </div>
-    <div>
-        <%= text_input f, :email, [id: "auth-register-email", placeholder: "Email"] %>
+    <div class="field">
+        <label for="auth-register-email" class="label">Email</label>
+        <%= text_input f, :email, [id: "auth-register-email", placeholder: "william@morris.com", class: "input"] %>
     </div>
-    <div>
-        <%= text_input f, :password, [id: "auth-register-password", placeholder: "Mot de passe"] %>
+    <div class="field">
+      <label for="auth-register-password" class="label">Mot de passe</label>
+        <%= text_input f, :password, [id: "auth-register-password", placeholder: "Mot de passe", class: "input"] %>
     </div>
-    <%= submit "Sign In", [id: "auth-register-submit"] %>
+    <%= submit "Enregistrer", [id: "auth-register-submit", class: "button is-dark"] %>
   <% end %>
+  </div>
 </div>

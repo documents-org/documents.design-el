@@ -1,0 +1,15 @@
+<div class="ForgotBox AuthBox">
+  <h3 class="subtitle">Mot de passe oublié ?</h3>
+  <div class="box">
+    <%= form_for @conn, Routes.auth_path(@conn, :do_forgot), [as: :info, method: "post"], fn f -> %>
+  <div class="field">
+    <label for="auth-forgot-email" class="label">E-mail du compte :</label>
+    <%= text_input f, :email, [id: "auth-forgot-email", placeholder: "william@morris.com", class: "input"] %>
+  </div>
+  <div>
+    <%= submit "Envoyer une demande", [id: "auth-forgot-submit", class: "button is-dark"] %>
+  </div>
+  <% end %>
+  </div>
+  <%= link "retour à la connexion", to: Routes.auth_path(@conn, :login) %>
+</div>

@@ -66,6 +66,7 @@ defmodule DocumentsDesign.Accounts do
   def prepare_new_user_attrs(%{"password" => p} = attrs) do
     attrs
     |> Map.put("verify_token", DocumentsDesign.Utilities.random_token())
+    |> Map.put("reset_token", DocumentsDesign.Utilities.random_token())
     |> Map.put("password", hash_password(p))
   end
 
@@ -73,13 +74,14 @@ defmodule DocumentsDesign.Accounts do
   Tries to set "verified" status to 1 when an user verifies their email.
   """
   def verify_email(email, token) do
-    case Repo.get_by(User, %{email: email, verify_token: token}) do
-      user ->
-        Ecto.Changeset.cast(user, %{verified: true}, [:verified])
-        |> Repo.update()
+    user = Repo.get_by(User, %{email: email, verify_token: token})
 
-      nil ->
-        {:error, "User not found"}
+    if user do
+      user
+      |> Ecto.Changeset.cast(%{verified: true}, [:verified])
+      |> Repo.update()
+    else
+      mystery_error_message()
     end
   end
 
@@ -87,17 +89,17 @@ defmodule DocumentsDesign.Accounts do
   Tries to authentificate an user.
   """
   def auth_user(email, password) do
-    case Repo.get_by(User, %{email: email}) do
-      user ->
-        if verify_password(user, password) do
-          {:ok, user}
-        else
-          {:error, "Bad credentials"}
-        end
+    user = Repo.get_by(User, %{email: email})
 
-      _ ->
-        Comeonin.Argon2.dummy_checkpw()
-        {:error, "Bad credentials"}
+    if user do
+      if verify_password(user, password) do
+        {:ok, user}
+      else
+        mystery_error_message()
+      end
+    else
+      Comeonin.Argon2.dummy_checkpw()
+      mystery_error_message()
     end
   end
 
@@ -168,4 +170,83 @@ defmodule DocumentsDesign.Accounts do
   def has_user do
     Repo.one(from u in "users", select: count()) > 0
   end
+
+  @doc """
+  Launches a password reset by assigning a new reset token,
+  and setting the reset date to "now".
+  """
+  def start_reset_password(email) do
+    user = Repo.get_by(User, %{email: email})
+
+    if user do
+      user
+      |> Ecto.Changeset.cast(
+        %{
+          reset_token: DocumentsDesign.Utilities.random_token(),
+          reset_date: NaiveDateTime.utc_now()
+        },
+        [:reset_date, :reset_token]
+      )
+      |> Repo.update()
+
+      {:ok, Repo.get_by(User, %{email: email})}
+    else
+      mystery_error_message()
+    end
+  end
+
+  @doc """
+  Does a password reset, checking email,
+  reset date, reset token, then sets password.
+  """
+  def do_reset_password(email, token, password) do
+    user = Repo.get_by(User, %{email: email, reset_token: token})
+    IO.inspect(user)
+
+    if user do
+      case check_reset_date(user) do
+        {:ok, user} ->
+          update_password(user, password)
+
+        {:error, _} ->
+          mystery_error_message()
+      end
+    else
+      mystery_error_message()
+    end
+  end
+
+  @doc """
+  Checks an user's reset password date for expiration (was it in the last 24 hours ?)
+  """
+  def check_reset_date(user) do
+    if user.reset_date do
+      case NaiveDateTime.compare(
+             NaiveDateTime.utc_now(),
+             NaiveDateTime.add(user.reset_date, 60 * 60 * 24)
+           ) do
+        :lt -> {:ok, user}
+        _ -> mystery_error_message()
+      end
+    else
+      mystery_error_message()
+    end
+  end
+
+  @doc """
+  Updates password, randomizes reset token, randomizes verify token.
+  """
+  def update_password(user, password) do
+    user
+    |> User.changeset(prepare_new_user_attrs(%{"password" => password}))
+    |> Repo.update()
+  end
+
+  @doc """
+  Standard and identical error message for every auth operation :
+  You don't want to communicate that an user exists, or doesn't,
+  or give too much reason on why auth/reset/verification failed.
+  This prevents enumeration.
+  """
+  def mystery_error_message, do: {:error, "Bad Credentials"}
 end
