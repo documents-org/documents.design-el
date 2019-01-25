@@ -56,8 +56,6 @@ defmodule DocumentsDesignWeb.AuthController do
         |> put_flash(:error, "Bad credentials")
         |> redirect(to: Routes.auth_path(conn, :login))
     end
-
-    render(conn, "login.html")
   end
 
   @doc """
