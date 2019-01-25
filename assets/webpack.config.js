@@ -13,10 +13,11 @@ module.exports = (env, options) => ({
     ]
   },
   entry: {
-      './js/app.js': ['./js/app.js'].concat(glob.sync('./vendor/**/*.js'))
+      main: ['./js/app.js'].concat(glob.sync('./vendor/**/*.js')),
+      admin: './js/admin/admin.js',
   },
   output: {
-    filename: 'app.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, '../priv/static/js')
   },
   module: {
@@ -30,12 +31,19 @@ module.exports = (env, options) => ({
       },
       {
         test: /\.(scss|sass|css)$/,
-        use: [MiniCssExtractPlugin.loader,'css-loader','sass-loader']
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader', {
+          loader: 'postcss-loader',
+          options: {
+            config: {
+              path: './'
+            }
+          }
+        }]
       }
     ]
   },
   plugins: [
-    new MiniCssExtractPlugin({ filename: '../css/app.css' }),
+    new MiniCssExtractPlugin({ filename: '../css/[name].css' }),
     new CopyWebpackPlugin([{ from: 'static/', to: '../' }])
   ]
 });
