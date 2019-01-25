@@ -10,7 +10,14 @@ defmodule DocumentsDesign.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      name: "Documents.design",
+      source_url: "https://github.com/documents-design/documents.design",
+      homepage_url: "https://documents.design",
+      docs: [
+        logo: "documents.jpg",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -46,7 +53,8 @@ defmodule DocumentsDesign.MixProject do
       {:comeonin, "~> 4.1"},
       {:argon2_elixir, "~> 1.3"},
       {:bamboo, "~> 1.1"},
-      {:bamboo_smtp, "~> 1.6.0"}
+      {:bamboo_smtp, "~> 1.6.0"},
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false}
     ]
   end
 
