@@ -4,7 +4,7 @@ defmodule DocumentsDesign.Repo.Migrations.CreateTags do
   def change do
     create table(:tags) do
       add :title, :string
-
+      add :slug, :string
       timestamps()
     end
 
