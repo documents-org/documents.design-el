@@ -5,6 +5,7 @@ defmodule DocumentsDesign.Repo.Migrations.CreateTags do
     create table(:tags) do
       add :title, :string
       add :slug, :string
+      add :project_id, references(:projects)
       timestamps()
     end
 

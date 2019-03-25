@@ -11,4 +11,9 @@ defmodule DocumentsDesign.Utilities do
   def slug_title(%{"title" => t} = attrs) do
     Map.put(attrs, "slug", slugify(t))
   end
+
+
+  def slug_title(whatever) do
+    Map.put(whatever, "slug", "")
+  end
 end

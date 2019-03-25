@@ -5,6 +5,7 @@ defmodule DocumentsDesignWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
+    plug Phoenix.LiveView.Flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -36,6 +37,8 @@ defmodule DocumentsDesignWeb.Router do
   scope "/admin", DocumentsDesignWeb do
     pipe_through [:browser, :global, :admin]
     get "/", AdminController, :index
+    post "/tags", AdminController, :add_tag
+    delete "/tag", AdminController, :delete_tag
     get "/tags", AdminController, :tags
     get "/sequence", AdminController, :sequence
     get "/info", AdminController, :info

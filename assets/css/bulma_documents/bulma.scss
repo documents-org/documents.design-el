@@ -1,21 +1,11 @@
 @charset "utf-8";
 
-$purple: #8A4D76;
-$pink: #FA7C91;
-$brown: #757763;
-$beige-light: #D0D1CD;
-$beige-lighter: #EFF0E0;
-
 $family-sans-serif: "BorgesTituloBlanca", sans-serif;
 $family-serif: monospace;
-$grey-dark: $brown;
-$grey-light: $beige-light;
-$primary: $purple;
-$link: $pink;
 $widescreen-enabled: false;
 $fullhd-enabled: false;
 
-$body-background-color: $beige-lighter;
+$body-background-color: #eee;
 
 @import "../../node_modules/bulma/sass/utilities/_all.sass";
 @import "../../node_modules/bulma/sass/base/_all.sass";

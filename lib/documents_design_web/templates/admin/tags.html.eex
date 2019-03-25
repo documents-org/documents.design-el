@@ -1,0 +1,21 @@
+<h2 class="subtitle">Édition des Tags</h2>
+
+<div class="tags">
+  <%= if (length(@tags) == 0) do %>
+    pas de tags
+  <% else %>
+    <%= for tag <- @tags do %>
+      <div class="tag"><%= tag.title %><%= link to: Routes.admin_path(@conn, :delete_tag, id: tag.id), data: [confirm: "Êtes-vous sûr ?"], method: :delete do %><span class="delete"></span><% end %></div>
+    <% end %>
+  <% end %>
+</div>
+
+<hr>
+
+<div class="field">
+  <%= form_for @tag_field, Routes.admin_path(@conn, :add_tag), fn f -> %>
+  <label for="" class="label">Ajouter un tag</label> 
+  <%= text_input f, :title, [class: "input"] %>
+</div>
+<%= submit "Ajouter", [class: "button"] %>
+<% end %>

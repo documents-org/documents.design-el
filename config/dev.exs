@@ -52,8 +52,12 @@ config :documents_design, DocumentsDesignWeb.Endpoint,
       ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
       ~r{priv/gettext/.*(po)$},
       ~r{lib/documents_design_web/views/.*(ex)$},
-      ~r{lib/documents_design_web/templates/.*(eex)$}
+      ~r{lib/documents_design_web/templates/.*(eex)$},
+      ~r{lib/documents_design_web/live/.*(ex)$}
     ]
+  ],
+  live_view: [
+    signing_salt: "DEVELOPMENT_SECRET"
   ]
 
 # Do not include metadata nor timestamps in development logs

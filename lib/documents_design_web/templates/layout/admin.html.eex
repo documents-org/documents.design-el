@@ -6,14 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>documents.design</title>
     <link rel="icon" href="<%= Routes.static_path(@conn, "/favicon.png") %>"/>
-    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/admin.css") %>"/>
   </head>
   <body>
-    <main role="main" class="container">
+    <aside class="Menu">
+      Menu
+      <ul>
+        <li><%= link "Projets", to: Routes.admin_path(@conn, :projects) %>
+        <li><%= link "Séquence d'accueil", to: Routes.admin_path(@conn, :sequence) %>
+        <li><%= link "Informations", to: Routes.admin_path(@conn, :info) %>
+        <li><%= link "Tags", to: Routes.admin_path(@conn, :tags) %>
+      </ul>
+    </aside>
+    <main role="main" class="Main">
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= render @view_module, @view_template, assigns %>
     </main>
-    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/admin.js") %>"></script>
   </body>
 </html>

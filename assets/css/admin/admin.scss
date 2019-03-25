@@ -32,3 +32,16 @@ html * {
     color: white;
   }
 }
+
+body {
+  display: flex;
+}
+
+.Menu, .Main {
+  padding: 1.5em;
+}
+
+.Main {
+  flex-grow: 1;
+  max-width: 1080px;
+}

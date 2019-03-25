@@ -10,7 +10,7 @@ defmodule DocumentsDesign.Content.Tag do
   end
 
   @doc false
-  def changeset(tag, attrs) do
+  def changeset(tag, attrs = %{}) do
     tag
     |> cast(DocumentsDesign.Utilities.slug_title(attrs), [:title, :slug])
     |> validate_required([:title, :slug])

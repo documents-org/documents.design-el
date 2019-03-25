@@ -40,7 +40,7 @@ defmodule DocumentsDesign.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.4.0"},
+      {:phoenix, "~> 1.4.0", override: true},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_ecto, "~> 4.0"},
       {:ecto_sql, "~> 3.0"},
@@ -54,7 +54,8 @@ defmodule DocumentsDesign.MixProject do
       {:argon2_elixir, "~> 1.3"},
       {:bamboo, "~> 1.1"},
       {:bamboo_smtp, "~> 1.6.0"},
-      {:ex_doc, "~> 0.19", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
+      {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"}
     ]
   end
 
